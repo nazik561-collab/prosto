@@ -1,0 +1,224 @@
+<title>Infiore — plan listopad</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;1,6..96,500&family=Figtree:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a calm editorial calendar — sticky summary bar, then one row per day with its two slots side by side */
+:root{
+  --bg:#F2F1EE; --surface:#FFFFFF; --ink:#1F2421; --muted:#6B706B; --line:#DEDCD6;
+  --accent:#2F4A3E; --accent-ink:#FFFFFF; --bloom:#B9787A; --bloom-soft:#F4E7E6;
+  --ok:#2E6B47; --ok-soft:#E1EFE5; --warn:#9A5B12; --warn-soft:#F7EBD9; --hl:#FCEFC7; --hl-ink:#5C4500;
+  --display:"Bodoni Moda",Didot,"Times New Roman",serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#161A18; --surface:#1F2421; --ink:#ECEBE6; --muted:#9DA39D; --line:#323833;
+  --accent:#8DB7A2; --accent-ink:#10201A; --bloom:#D9A0A2; --bloom-soft:#3A2A2B;
+  --ok:#8FD0A8; --ok-soft:#1E3327; --warn:#E6B26E; --warn-soft:#3A2D1A; --hl:#4A3D12; --hl-ink:#F7E3A6; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#161A18; --surface:#1F2421; --ink:#ECEBE6; --muted:#9DA39D; --line:#323833;
+  --accent:#8DB7A2; --accent-ink:#10201A; --bloom:#D9A0A2; --bloom-soft:#3A2A2B;
+  --ok:#8FD0A8; --ok-soft:#1E3327; --warn:#E6B26E; --warn-soft:#3A2D1A; --hl:#4A3D12; --hl-ink:#F7E3A6; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:1180px;margin:0 auto;padding-block:28px 64px;display:grid;gap:28px}
+header.hero{display:grid;gap:10px}
+.eyebrow{font:500 12px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--bloom)}
+h1{font:500 clamp(34px,6vw,58px)/1.05 var(--display);margin:0;text-wrap:balance}
+h1 em{font-style:italic;color:var(--accent)}
+.lede{max-width:62ch;color:var(--muted);margin:0}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:12px;border-bottom:1px solid var(--line);display:grid;gap:12px}
+.stats{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;font-variant-numeric:tabular-nums}
+.stat b{font:500 22px/1 var(--display)}
+.stat span{color:var(--muted);font-size:13px;margin-left:6px}
+.progress{height:6px;border-radius:3px;background:var(--line);display:flex;overflow:hidden}
+.progress i{display:block;height:100%}
+.filters{display:flex;flex-wrap:wrap;gap:8px}
+.filters select{font:inherit;font-size:14px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
+.conn{font-size:13px;color:var(--muted)}
+details.ph{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 16px}
+details.ph summary{cursor:pointer;font-weight:600}
+details.ph ul{margin:10px 0 0;padding-left:18px;display:grid;gap:4px}
+.week h2{font:500 26px/1.2 var(--display);margin:8px 0 4px}
+.week p.theme{margin:0 0 14px;color:var(--muted)}
+.day{display:grid;grid-template-columns:110px 1fr;gap:16px;padding-block:16px;border-top:1px solid var(--line)}
+.date{font-variant-numeric:tabular-nums}
+.date b{display:block;font:500 34px/1 var(--display)}
+.date span{font:500 12px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.slots{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:14px;min-width:0}
+.post{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:10px;min-width:0;border-top:4px solid var(--line)}
+.post[data-status="ok"]{border-top-color:var(--ok)}
+.post[data-status="edit"]{border-top-color:var(--warn)}
+.meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font:500 12px/1 var(--mono)}
+.chip{padding:5px 8px;border-radius:999px;background:var(--bg);color:var(--muted)}
+.chip.fmt{background:var(--bloom-soft);color:var(--ink)}
+.chip.st{margin-left:auto}
+.chip.st.ok{background:var(--ok-soft);color:var(--ok)}
+.chip.st.edit{background:var(--warn-soft);color:var(--warn)}
+.post h3{margin:0;font:600 17px/1.3 var(--body);text-wrap:balance}
+.cap{white-space:pre-wrap;margin:0;overflow-wrap:anywhere}
+mark{background:var(--hl);color:var(--hl-ink);padding:0 3px;border-radius:3px}
+.tags{color:var(--accent);font-size:13px;overflow-wrap:anywhere}
+dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:13px}
+dt{color:var(--muted);font:500 11px/1.8 var(--mono);text-transform:uppercase;letter-spacing:.08em}
+dd{margin:0;min-width:0}
+.act{display:grid;gap:8px;border-top:1px dashed var(--line);padding-top:10px}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+button{font:600 14px/1 var(--body);padding:9px 14px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+button:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button.ok[aria-pressed="true"]{background:var(--ok);border-color:var(--ok);color:var(--surface)}
+button.edit[aria-pressed="true"]{background:var(--warn);border-color:var(--warn);color:var(--surface)}
+button.save{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+button:disabled{opacity:.5;cursor:not-allowed}
+textarea{font:inherit;font-size:14px;width:100%;min-height:60px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);resize:vertical}
+.note{font-size:12px;color:var(--muted)}
+.empty{color:var(--muted);padding:24px 0}
+@media (max-width:640px){.day{grid-template-columns:1fr;gap:8px}.date b{display:inline;font-size:26px;margin-right:8px}}
+@media (prefers-reduced-motion:no-preference){.post{transition:border-color .2s}}
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">Infiore · Instagram · 2–29 listopada 2026</div>
+    <h1>Plan treści na <em>listopad</em></h1>
+    <p class="lede">56 publikacji, dwie dziennie: o 12:00 i 19:30. Przy każdym poście kliknij „Akceptuję” albo „Do poprawy” i dopisz uwagi. Wszystkie decyzje zapisują się automatycznie i widzi je cały zespół.</p>
+  </header>
+
+  <div class="bar">
+    <div class="stats" id="stats"></div>
+    <div class="progress" id="progress" aria-hidden="true"></div>
+    <div class="filters">
+      <select id="f-week" aria-label="Tydzień"><option value="">Wszystkie tygodnie</option></select>
+      <select id="f-status" aria-label="Status">
+        <option value="">Każdy status</option><option value="pending">Do decyzji</option>
+        <option value="ok">Zaakceptowane</option><option value="edit">Do poprawy</option>
+      </select>
+      <select id="f-format" aria-label="Format"><option value="">Każdy format</option></select>
+    </div>
+    <div class="conn" id="conn">Łączenie z zapisem decyzji…</div>
+  </div>
+
+  <details class="ph">
+    <summary>Do uzupełnienia przez Infiore (zaznaczone na żółto w tekstach)</summary>
+    <ul id="ph"></ul>
+  </details>
+
+  <main id="list"></main>
+</div>
+
+<script>
+const PLAN = /*PLAN*/null;
+const WEEKS = [
+  {from:"2026-11-02",to:"2026-11-08",name:"Tydzień 1 · Po targach",theme:"Relacja z targów, nowości i zaproszenie do showroomu."},
+  {from:"2026-11-09",to:"2026-11-15",name:"Tydzień 2 · Personalizacja i tkaniny",theme:"Jak powstaje mebel na zamówienie, wybór tkanin, 11 listopada."},
+  {from:"2026-11-16",to:"2026-11-22",name:"Tydzień 3 · Dla projektantów",theme:"Współpraca B2B, panele ścienne, produkcja od środka."},
+  {from:"2026-11-23",to:"2026-11-29",name:"Tydzień 4 · Zima i święta",theme:"Terminy przed świętami, Black Friday po naszemu, Adwent."}
+];
+const DAYS = ["niedz.","pon.","wt.","śr.","czw.","pt.","sob."];
+const STATUS_LABEL = {ok:"Zaakceptowane",edit:"Do poprawy",pending:"Do decyzji"};
+const state = {decisions:{}, db:null, user:null, canWrite:null, filters:{week:"",status:"",format:""}};
+
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function hl(s){return esc(s).replace(/\[[^\]]+\]/g,m=>`<mark>${m}</mark>`)}
+function weekOf(d){return WEEKS.findIndex(w=>d>=w.from&&d<=w.to)}
+function statusOf(id){return state.decisions[id]?.status||"pending"}
+function tagsFor(p){return p.tags.split(",").map(k=>PLAN.hashtags[k]||"").join(" ").split(" ").filter((t,i,a)=>t&&a.indexOf(t)===i).join(" ")}
+
+function renderStats(){
+  const n=PLAN.posts.length, c={ok:0,edit:0,pending:0};
+  PLAN.posts.forEach(p=>c[statusOf(p.id)]++);
+  document.getElementById("stats").innerHTML=
+    `<div class="stat"><b>${c.ok}</b><span>zaakceptowane</span></div>`+
+    `<div class="stat"><b>${c.edit}</b><span>do poprawy</span></div>`+
+    `<div class="stat"><b>${c.pending}</b><span>czeka na decyzję</span></div>`+
+    `<div class="stat"><b>${n}</b><span>wszystkich postów</span></div>`;
+  document.getElementById("progress").innerHTML=
+    `<i style="width:${c.ok/n*100}%;background:var(--ok)"></i><i style="width:${c.edit/n*100}%;background:var(--warn)"></i>`;
+}
+
+function postHTML(p){
+  const d=state.decisions[p.id]||{}, st=statusOf(p.id), dis=state.canWrite===false?"disabled":"";
+  return `<article class="post" data-id="${p.id}" data-status="${st}">
+    <div class="meta"><span class="chip">${p.time}</span><span class="chip fmt">${esc(p.format)}</span><span class="chip">${esc(p.rubric)}</span>
+      <span class="chip st ${st}">${STATUS_LABEL[st]}</span></div>
+    <h3>${hl(p.title)}</h3>
+    <p class="cap">${hl(p.caption)}</p>
+    <div class="tags">${esc(tagsFor(p))}</div>
+    <dl><dt>CTA</dt><dd>${esc(p.cta)}</dd><dt>Wizual</dt><dd>${hl(p.visual)}</dd></dl>
+    <div class="act">
+      <div class="btns">
+        <button class="ok" data-act="ok" aria-pressed="${st==="ok"}" ${dis}>Akceptuję</button>
+        <button class="edit" data-act="edit" aria-pressed="${st==="edit"}" ${dis}>Do poprawy</button>
+      </div>
+      <textarea id="c-${p.id}" placeholder="Uwagi do tego posta (opcjonalnie)" ${dis}>${esc(d.comment||"")}</textarea>
+      <div class="btns"><button class="save" data-act="save" ${dis}>Zapisz uwagi</button><span class="note" id="n-${p.id}">${d.at?"Ostatnia zmiana: "+new Date(d.at).toLocaleString("pl-PL"):""}</span></div>
+    </div>
+  </article>`;
+}
+
+function render(){
+  renderStats();
+  const f=state.filters, list=document.getElementById("list");
+  const posts=PLAN.posts.filter(p=>(!f.week||weekOf(p.date)==f.week)&&(!f.status||statusOf(p.id)===f.status)&&(!f.format||p.format===f.format));
+  if(!posts.length){list.innerHTML=`<p class="empty">Brak postów dla wybranych filtrów.</p>`;return}
+  let html="";
+  WEEKS.forEach((w,wi)=>{
+    const wp=posts.filter(p=>weekOf(p.date)===wi); if(!wp.length)return;
+    html+=`<section class="week"><h2>${w.name}</h2><p class="theme">${w.theme}</p>`;
+    [...new Set(wp.map(p=>p.date))].forEach(day=>{
+      const dt=new Date(day+"T12:00:00");
+      html+=`<div class="day"><div class="date"><b>${dt.getDate()}</b><span>${DAYS[dt.getDay()]} · listopad</span></div><div class="slots">${wp.filter(p=>p.date===day).map(postHTML).join("")}</div></div>`;
+    });
+    html+=`</section>`;
+  });
+  // keep unsaved comment drafts across re-render
+  const drafts={}; list.querySelectorAll("textarea").forEach(t=>{if(t===document.activeElement||t.dataset.dirty)drafts[t.id]=t.value});
+  list.innerHTML=html;
+  for(const id in drafts){const t=document.getElementById(id); if(t){t.value=drafts[id]; t.dataset.dirty="1"}}
+}
+
+async function save(id, patch){
+  const note=document.getElementById("n-"+id);
+  if(!state.db){note.textContent="Zapis niedostępny w tym widoku. Otwórz stronę na claude.ai po zalogowaniu.";return}
+  const prev=state.decisions[id]||{};
+  const by=state.user?await state.user.id():null;
+  const body={status:prev.status||"pending",comment:prev.comment||"",...patch,postId:id,by:by||"",at:new Date().toISOString()};
+  state.decisions[id]=body; render();
+  try{ await state.db.doc("approvals/p"+id).set(body); const n=document.getElementById("n-"+id); if(n)n.textContent="Zapisano"; }
+  catch(e){ state.decisions[id]=prev; render(); const n=document.getElementById("n-"+id);
+    if(n)n.textContent=(e&&e.code==="permission_denied")?"Nie masz uprawnień do zapisu. Poproś o dostęp „Contributor”.":"Nie udało się zapisać. Spróbuj ponownie."; }
+}
+
+document.getElementById("list").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-act]"); if(!b)return;
+  const id=+b.closest(".post").dataset.id, t=document.getElementById("c-"+id), comment=t?t.value:"";
+  if(t)delete t.dataset.dirty;
+  if(b.dataset.act==="save") save(id,{comment});
+  else { const cur=statusOf(id); save(id,{status:cur===b.dataset.act?"pending":b.dataset.act,comment}); }
+});
+document.getElementById("list").addEventListener("input",e=>{if(e.target.tagName==="TEXTAREA")e.target.dataset.dirty="1"});
+[["f-week","week"],["f-status","status"],["f-format","format"]].forEach(([id,k])=>
+  document.getElementById(id).addEventListener("change",e=>{state.filters[k]=e.target.value;render()}));
+
+// filters + placeholders
+WEEKS.forEach((w,i)=>document.getElementById("f-week").insertAdjacentHTML("beforeend",`<option value="${i}">${w.name}</option>`));
+[...new Set(PLAN.posts.map(p=>p.format))].forEach(f=>document.getElementById("f-format").insertAdjacentHTML("beforeend",`<option>${esc(f)}</option>`));
+document.getElementById("ph").innerHTML=Object.entries(PLAN.placeholders).map(([k,v])=>`<li><mark>${esc(k)}</mark> — ${esc(v)}</li>`).join("");
+render();
+
+(async()=>{
+  const conn=document.getElementById("conn");
+  const db=await claude.use("db"); state.user=await claude.use("user");
+  if(!db){conn.textContent="Podgląd tylko do odczytu. Aby zatwierdzać posty, otwórz stronę na claude.ai po zalogowaniu.";return}
+  state.db=db;
+  try{ state.canWrite=state.user?await state.user.can("data.write"):null }catch(e){}
+  conn.textContent=state.canWrite===false?"Masz dostęp tylko do odczytu. Poproś o uprawnienia „Contributor”, aby zatwierdzać posty.":"Decyzje zapisują się automatycznie.";
+  db.collection("approvals").onSnapshot(snap=>{
+    const m={}; snap.docs.forEach(d=>{const v=d.data(); if(v&&v.postId)m[v.postId]=v});
+    state.decisions=m; render();
+  },()=>{conn.textContent="Utracono połączenie z zapisem. Odśwież stronę."});
+})();
+</script>
